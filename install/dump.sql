@@ -41,5 +41,5 @@ INSERT INTO TABLE_PREFIX_setting (name, value) VALUES ('plugins', 'a:7:{s:7:"tex
 INSERT INTO TABLE_PREFIX_permission (id, name) VALUES (1, 'administrator');
 INSERT INTO TABLE_PREFIX_permission (id, name) VALUES (2, 'developer');
 INSERT INTO TABLE_PREFIX_permission (id, name) VALUES (3, 'editor');
-INSERT INTO TABLE_PREFIX_user (name, email, username, password, language, created_on, updated_on, created_by_id, updated_by_id) VALUES ('Administrator', 'email@yoursite.com', 'admin', '__ADMIN_PASSWORD__', '__LANG__', '__DATE__', '__DATE__', 1, 1);
+INSERT INTO TABLE_PREFIX_user (name, email, username, password, language, created_on, updated_on, created_by_id, updated_by_id) VALUES ('Administrator', '__ADMIN_MAIL__', '__ADMIN_LOGIN__', '__ADMIN_PASSWORD__', '__LANG__', '__DATE__', '__DATE__', 1, 1);
 INSERT INTO TABLE_PREFIX_user_permission VALUES (1, 1);

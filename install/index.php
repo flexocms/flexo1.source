@@ -43,7 +43,7 @@ define('SQLDUMP_FILE_PATH', CMS_ROOT.DIRECTORY_SEPARATOR.'install'.DIRECTORY_SEP
 
 
 // Timezone default
-define('DEFAULT_TIMEZONE', 'Europe/Helsinki');
+define('DEFAULT_TIMEZONE', 'Europe/Moscow');
 
 
 // Timezone
@@ -129,6 +129,14 @@ if (!empty($_POST['install']))
 	{
 		$error = __('Field <b>Administrator username</b> is required!');
 	}
+	else if (empty($data['mail']))
+	{
+		$error = __('Field <b>Administrator mail</b> is required!');
+	}
+	else if (!eregi("^[a-zA-Z0-9\._-]+@[a-zA-Z0-9\._-]+\.[a-zA-Z]{2,4}$",$data['mail']))
+	{
+		$error = __('Wrong <b>Administrator mail</b> format!');
+	}
 	else
 	{
 		// SQLite needs more than 30 seconds
@@ -202,7 +210,9 @@ if (!empty($_POST['install']))
 				{
 					// Insert SQL dump
 					
-					$password = '12'.dechex(rand(100000000, 4294967295)).'K';
+					//$password = time().dechex(rand(100000000, 4294967295));
+					$rndkey = array('h','a','d','e','q','f','g','j','p','r','s','t','b','w','y','c','z','k','m');
+          $password = $rndkey[rand(1,count($rndkey)-1)].dechex(date('SM')).$rndkey[rand(1,count($rndkey)-1)].dechex(rand(100000000, 4294967295)+time()).$rndkey[rand(1,count($rndkey)-1)];
 					
 					function date_incremenator()
 					{
@@ -212,6 +222,8 @@ if (!empty($_POST['install']))
 					}
 					
 					$dump_content = file_get_contents($dump_file);
+					$dump_content = str_replace('__ADMIN_MAIL__', $data['mail'], $dump_content);
+					$dump_content = str_replace('__ADMIN_LOGIN__', $data['username'], $dump_content);
 					$dump_content = str_replace('TABLE_PREFIX_', $data['table_prefix'], $dump_content);
 					$dump_content = str_replace('__ADMIN_PASSWORD__', sha1($password), $dump_content);
 					$dump_content = preg_replace_callback('/__DATE__/m', 'date_incremenator', $dump_content);
@@ -421,6 +433,11 @@ if (!empty($_POST['install']))
 				<section id="installUsername">
 					<label for="installUsernameField"><?php echo __('Administrator username'); ?> <em><?php echo __('Required. Allows you to specify a custom username for the administrator. Default: admin'); ?></em></label>
 					<span><input id="installUsernameField" class="input-text" type="text" name="install[username]" maxlength="255" size="50" value="<?php echo(isset($data['username']) ? $data['username']: 'admin'); ?>" /></span>
+				</section>
+				
+				<section id="installMail">
+					<label for="installMailField"><?php echo __('Administrator mail'); ?> <em><?php echo __('Required. Allows you to specify a custom email address for the administrator. Default: admin@example.com'); ?></em></label>
+					<span><input id="installMailField" class="input-text" type="text" name="install[mail]" maxlength="255" size="50" value="<?php echo(isset($data['mail']) ? $data['mail']: 'admin@example.com'); ?>" /></span>
 				</section>
 				
 				<section id="installURLSuffix">
