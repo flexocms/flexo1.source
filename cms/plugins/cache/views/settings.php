@@ -1,3 +1,4 @@
+<?php if(!defined('CMS_ROOT')) die; ?>
 <h1>
 	<a href="<?php echo get_url('plugins'); ?>"><?php echo __('Plugins'); ?></a> &rarr;
 	<?php echo __('Cache settings'); ?>

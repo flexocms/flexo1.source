@@ -129,11 +129,14 @@ if (!empty($_POST['install']))
 	{
 		$error = __('Field <b>Administrator username</b> is required!');
 	}
+	else if (!preg_match("/^[a-zA-Z0-9_]{4,64}$/", $data['username'])){
+    $error = __('Wrong <b>Administrator username</b> format!');
+	}
 	else if (empty($data['mail']))
 	{
 		$error = __('Field <b>Administrator mail</b> is required!');
 	}
-	else if (!eregi("^[a-zA-Z0-9\._-]+@[a-zA-Z0-9\._-]+\.[a-zA-Z]{2,4}$",$data['mail']))
+	else if (!preg_match("/^[a-zA-Z0-9\._-]+@[a-zA-Z0-9\._-]+\.[a-zA-Z]{2,4}$/",$data['mail']))
 	{
 		$error = __('Wrong <b>Administrator mail</b> format!');
 	}

@@ -121,7 +121,7 @@ cms.filters.add = function( name, to_editor_callback, to_textarea_callback )
 {	
 	if( to_editor_callback == undefined || to_textarea_callback == undefined )
 	{
-		frog.error('System try to add filter without required callbacks.', name, to_editor_callback, to_textarea_callback);
+		cms.error('System try to add filter without required callbacks.', name, to_editor_callback, to_textarea_callback);
 		return;
 	}
 	
@@ -154,6 +154,7 @@ cms.filters.switchOn = function( textarea_id, filter )
 				catch(e)
 				{
 					//frog.error('Errors with filter switch on!', e);
+					cms.error('Errors with filter switch on!', e);
 				}
 				
 				break;

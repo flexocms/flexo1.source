@@ -37,7 +37,7 @@
  */
 
 // CMS version
-define('CMS_VERSION', '0.1.4');
+define('CMS_VERSION', '0.1.5');
 
 // Base pathes
 define('CMS_ROOT',          dirname(__FILE__));
@@ -190,7 +190,8 @@ Plugin::init();
 
 
 // Routes
-if (strpos(CURRENT_URI, ADMIN_DIR_NAME) === 1)
+$uriAtomized = explode('/', CURRENT_URI);
+if (count($uriAtomized) > 1 && (strcasecmp($uriAtomized[1], ADMIN_DIR_NAME) === 0))
 {
 	$default_tab = Setting::get('default_tab');
 	$default_tab = (empty($default_tab) ? 'page/index' : $default_tab);

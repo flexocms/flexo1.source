@@ -1,3 +1,4 @@
+<?php if(!defined('CMS_ROOT')) die; ?>
 <script>
 	var FILE_MANAGER_NOW_PATH = '<?php echo $now_path; ?>';
 </script>

@@ -28,7 +28,7 @@ define('URL_SUFFIX', '__URL_SUFFIX__');
 // Set the timezone of your choice.
 // Go here for more information on the available timezones:
 // http://php.net/timezones
-define('DEFAULT_TIMEZONE', 'Europe/Helsinki');
+define('DEFAULT_TIMEZONE', 'Europe/Moscow');
 
 // Default system locale
 define('DEFAULT_LOCALE', '__LANG__');
