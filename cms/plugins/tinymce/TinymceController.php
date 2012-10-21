@@ -47,7 +47,7 @@ class TinymceController extends PluginController
 		$root = Record::findByIdFrom('Page', 1);
         $childs_content = $this->_getChildsContent( 1, 0 );
 		
-		echo('var tinyMCELinkList = new Array(["'. $root->title .'", "'. BASE_URL .'"]'. $childs_content .');');
+		echo('var tinyMCELinkList = new Array(["'. addslashes($root->title) .'", "'. BASE_URL .'"]'. $childs_content .');');
 	}
 	
 	private function _getChildsContent( $parent_id, $level )
@@ -58,7 +58,7 @@ class TinymceController extends PluginController
         
         foreach( $childrens as $index => $child )
         {
-			$content .= ', ["'. str_repeat('—', $level+1) .' '. $child->title .'", "'. CMS_URL . ($uri = $child->getUri()) . (strstr($uri, '.') === false ? URL_SUFFIX : '') .'"]';
+			$content .= ', ["'. str_repeat('—', $level+1) .' '. addslashes($child->title) .'", "'. CMS_URL . ($uri = $child->getUri()) . (strstr($uri, '.') === false ? URL_SUFFIX : '') .'"]';
             $content .= $this->_getChildsContent( $child->id, $level+1 );
         }
         
