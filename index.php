@@ -37,7 +37,7 @@
  */
 
 // CMS version
-define('CMS_VERSION', '0.1.5');
+define('CMS_VERSION', '0.1.5 rc2');
 
 // Base pathes
 define('CMS_ROOT',          dirname(__FILE__));

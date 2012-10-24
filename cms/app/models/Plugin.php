@@ -83,7 +83,8 @@ class Plugin
 				}
 				
 				// Index file
-				if (strpos(CURRENT_URI, ADMIN_DIR_NAME) === 1)
+				$uriAtomized = explode('/', CURRENT_URI);
+        if (count($uriAtomized) > 1 && (strcasecmp($uriAtomized[1], ADMIN_DIR_NAME) === 0))
 					$file = PLUGINS_ROOT.DIRECTORY_SEPARATOR.$plugin_id.DIRECTORY_SEPARATOR . 'backend.php';
 				else
 					$file = PLUGINS_ROOT.DIRECTORY_SEPARATOR.$plugin_id.DIRECTORY_SEPARATOR . 'frontend.php';
