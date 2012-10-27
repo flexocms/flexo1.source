@@ -663,7 +663,7 @@ cms.init.add(['page_add', 'page_edit'], function()
 		// events
 		onSelect: function( dateText, inst )
 		{
-			inst.input.val( dateText +' 00:00:00' );
+			inst.input.attr("value", dateText +' 00:00:00' );
 		}
 	});
 	

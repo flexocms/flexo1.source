@@ -101,6 +101,8 @@ return array(
 	'Draft' => 'Черновик',
 	'E-mail' => 'Эл. почта',
 	'E-mail address' => 'Адрес эл. почты',
+	'E-mail is not valid!' => 'Неверный адрес эл. почты!',
+	'This e-mail is already occupied!' => 'Этот адрес эл. почты уже занят!',
 	'Edit page' => 'Редактировать страницу',
 	'Edit layout' => 'Редактировать шаблон',
 	'Edit snippet' => 'Редактировать сниппет',

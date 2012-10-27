@@ -85,7 +85,7 @@ class Page extends Record
         $this->updated_on = $this->created_on;
         $this->updated_by_id = $this->created_by_id;
         
-        if ($this->status_id == Page::STATUS_PUBLISHED)
+        if ($this->status_id == Page::STATUS_PUBLISHED && empty($this->published_on))
             $this->published_on = date('Y-m-d H:i:s');
         
 		if ($this->position == 0)

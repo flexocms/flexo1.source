@@ -127,6 +127,22 @@ class UserController extends Controller
             redirect(get_url('user/add'));
         }
         
+        //Validate E-mail
+        if (!validate_email($data['email']))
+        {
+            Flash::set('error', __('E-mail is not valid!'));
+            redirect(get_url('user/add'));
+        }
+        else
+        {
+            $user = User::findBy('email', $data['email']);
+            if(is_object($user))
+            {
+              Flash::set('error', __('This e-mail is already occupied!'));
+              redirect(get_url('user/add'));
+            }
+        }
+        
         $user = new User($data);
         
         if ($user->save())
@@ -189,6 +205,22 @@ class UserController extends Controller
             }
         }
         else unset($data['password'], $data['confirm']);
+        
+        //Validate E-mail
+        if (!validate_email($data['email']))
+        {
+            Flash::set('error', __('E-mail is not valid!'));
+            redirect(get_url('user/edit/'.$id));
+        }
+        else
+        {
+            $user = User::findBy('email', $data['email']);
+            if($user)
+            {
+              Flash::set('error', __('This e-mail is already occupied!'));
+              redirect(get_url('user/edit/'.$id));
+            }
+        }
         
         $user = Record::findByIdFrom('User', $id);
         $user->setFromData($data);
