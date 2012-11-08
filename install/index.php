@@ -41,18 +41,44 @@ define('CONFIG_FILE_PATH', CMS_ROOT.DIRECTORY_SEPARATOR.'config.php');
 define('CONFIGTPL_FILE_PATH', CMS_ROOT.DIRECTORY_SEPARATOR.'install'.DIRECTORY_SEPARATOR.'config.tpl');
 define('SQLDUMP_FILE_PATH', CMS_ROOT.DIRECTORY_SEPARATOR.'install'.DIRECTORY_SEPARATOR.'dump.sql');
 
+function get_timezones($timezone_identifiers)
+{
+        if (empty($timezone_identifiers)) return false;
+        $timezones = array(); 
+        foreach( $timezone_identifiers as $value )
+        {
+            if ( preg_match( '/^(America|Antartica|Arctic|Asia|Atlantic|Europe|Indian|Pacific)\//', $value ) )
+            {
+                $ex=explode('/',$value);//obtain continent,city
+                $city = isset($ex[2])? $ex[1].' - '.$ex[2]:$ex[1];//in case a timezone has more than one
+                $timezones[$ex[0]][$value] = $city;
+            }
+        }
+        return $timezones;
+}
 
-// Timezone default
-define('DEFAULT_TIMEZONE', 'Europe/Moscow');
-
-
-// Timezone
-ini_set('date.timezone', DEFAULT_TIMEZONE);
-if(function_exists('date_default_timezone_set'))
-    date_default_timezone_set(DEFAULT_TIMEZONE);
-else
-    putenv('TZ='.DEFAULT_TIMEZONE);
-
+function get_select_timezones($select_name='TIMEZONE',$selected=NULL, $timezones=NULL)
+{
+    $sel ='';
+    if (!is_array($timezones)) $timezones = get_timezones();
+    $sel.='<select id="'.$select_name.'" name="'.$select_name.'">';
+    foreach( $timezones as $continent=>$timezone )
+    {
+        $sel.= '<optgroup label="'.$continent.'">';
+        foreach( $timezone as $city=>$cityname )
+        {            
+            if ($selected==$city)
+            {
+                $sel.= '<option selected=selected value="'.$city.'">'.$cityname.'</option>';
+            }
+            else $sel.= '<option value="'.$city.'">'.$cityname.'</option>';
+        }
+        $sel.= '</optgroup>';
+    }
+    $sel.='</select>';
+ 
+    return $sel;
+}
 
 // Check config.tpl file
 if (!file_exists(CONFIGTPL_FILE_PATH))
@@ -93,12 +119,15 @@ $req_pdo     = class_exists('PDO');
 $pdo_drv = ($req_pdo ? PDO::getAvailableDrivers(): array());
 
 $req_mysql   = in_array('mysql', $pdo_drv);
-$req_pgsql   = in_array('pgsql', $pdo_drv);
 $req_sqlite  = in_array('sqlite', $pdo_drv);
 $req_php     = (PHP_VERSION < 5 ? false: true);
 $req_json    = (function_exists('json_encode') || class_exists('JSON'));
 $req_rewrite = (isset($_GET['mod_rewrite']) && $_GET['mod_rewrite'] == '1' ? true: false);
 
+// Timezone
+$tzlist_ids = false;
+if (method_exists('DateTimeZone','listIdentifiers')) $tzlist_ids = DateTimeZone::listIdentifiers();  
+$tzlist = get_timezones($tzlist_ids);
 
 // POST
 if (!empty($_POST['install']))
@@ -142,9 +171,17 @@ if (!empty($_POST['install']))
 	}
 	else
 	{
+    // Timezone ...again
+    $tzone = $data['default_timezone'];
+    if ((!is_array($tzlist_ids)) || (@in_array($tzone, $tzlist_ids, true)==false)) $tzone = date_default_timezone_get();
+    ini_set('date.timezone', $tzone);
+    if(function_exists('date_default_timezone_set'))
+        date_default_timezone_set($tzone);
+    else
+        putenv('TZ='.$tzone);    
+        
 		// SQLite needs more than 30 seconds
 		@set_time_limit(180);
-		
 		// Prepare connection
 		if ($data['db_driver'] != 'sqlite' )
 			$db_dsn = $data['db_driver'] . ':dbname='. $data['db_name'] . (';host=' . $data['db_server'] . (!empty($data['db_port']) ? ';port=' . $data['db_port']: ''));
@@ -265,6 +302,7 @@ if (!empty($_POST['install']))
 							'__DB_USER__'         => $data['db_user'],
 							'__DB_PASS__'         => $data['db_password'],
 							'__TABLE_PREFIX__'    => $data['table_prefix'],
+							'__DEFAULT_TIMEZONE__'=> $tzone,
 							'__USE_MOD_REWRITE__' => ($req_rewrite ? 'true': 'false'),
 							'__URL_SUFFIX__'      => $data['url_suffix'],
 							'__LANG__'            => $i18n_lang
@@ -391,9 +429,6 @@ if (!empty($_POST['install']))
 					<span>
 						<select id="installDriverField" name="install[db_driver]">
 							<option value="mysql" <?php if (isset($data['db_driver']) && $data['db_driver'] == 'mysql') echo('selected'); ?> >MySQL</option>
-							<?php if($req_pgsql): ?>
-							<option value="pgsql" <?php if (isset($data['db_driver']) && $data['db_driver'] == 'pgsql') echo('selected'); ?> >PostgreSQL</option>
-							<?php endif; ?>
 							<?php if($req_sqlite): ?>
 							<option value="sqlite" <?php if (isset($data['db_driver']) && $data['db_driver'] == 'sqlite') echo('selected'); ?> >SQLite</option>
 							<?php endif; ?>
@@ -447,6 +482,11 @@ if (!empty($_POST['install']))
 					<label for="installURLSuffixField"><?php echo __('URL suffix'); ?> <em><?php echo __('Optional. Add a suffix to simulate static html files.'); ?></em></label>
 					<span><input id="installURLSuffixField" class="input-text" type="text" name="install[url_suffix]" maxlength="255" size="50" value="<?php echo(isset($data['url_suffix']) ? $data['url_suffix']: '.html'); ?>" /></span>
 				</section>
+				
+				<?php if(is_array($tzlist)){ ?><section id="installtimezone">
+					<label for="installtimezone"><?php echo __('Default timezone'); ?> <em><?php echo __('Optional. Add a suffix to simulate static html files.'); ?></em></label>
+					<span><?=get_select_timezones('install[default_timezone]', date_default_timezone_get(), $tzlist)?></span>
+				</section><?php } ?>
 				
 				<div class="box-buttons">
 					<button><img src="../admin/images/check.png" /> <?php echo __('Install now!'); ?></button>
