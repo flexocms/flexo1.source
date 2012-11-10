@@ -1211,51 +1211,6 @@ function get_microtime()
     return doubleval($time[0]) + $time[1];
 }
 
-// Check for email without implementation of additional email helper
-// I'm afraid of its regular extension
-function validate_email($email)
-	{
-	  if (is_array($email)) return false;
-		$atIndex	= strrpos($email, "@");
-		$domain		= substr($email, $atIndex+1);
-		$local		= substr($email, 0, $atIndex);
-		$domainLen	= strlen($domain);
-		if ($domainLen < 1 || $domainLen > 255) {
-			return false;
-		}
-		$allowed	= 'A-Za-z0-9!#&*+=?_-';
-		$regex		= "/^[$allowed][\.$allowed]{0,63}$/";
-		if ( ! preg_match($regex, $local) ) {
-			return false;
-		}
-		$regex		= '/^[0-9\.]+$/';
-		if ( preg_match($regex, $domain)) {
-			return true;
-		}
-		$localLen	= strlen($local);
-		if ($localLen < 1 || $localLen > 64) {
-			return false;
-		}
-		$domain_array	= explode(".", rtrim( $domain, '.' ));
-		$regex		= '/^[A-Za-z0-9-]{0,63}$/';
-		foreach ($domain_array as $domain ) {
-			if ( ! $domain ) {
-				return false;
-			}
-			if ( ! preg_match($regex, $domain) ) {
-				return false;
-			}
-			if ( strpos($domain, '-' ) === 0 ) {
-				return false;
-			}
-			$length = strlen($domain) -1;
-			if ( strpos($domain, '-', $length ) === $length ) {
-				return false;
-			}
-		}
-		return true;
-}
-
 /**
  * Provides a nice print out of the stack trace when an exception is thrown.
  *

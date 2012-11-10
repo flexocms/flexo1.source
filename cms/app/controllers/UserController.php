@@ -55,6 +55,7 @@ class UserController extends Controller
             redirect(get_url('login'));
         
         $this->setLayout('backend');
+        use_helper('Validator');
     }
     
     public function index()
@@ -128,7 +129,7 @@ class UserController extends Controller
         }
         
         //Validate E-mail
-        if (!validate_email($data['email']))
+        if (!Validator::validate_email($data['email']))
         {
             Flash::set('error', __('E-mail is not valid!'));
             redirect(get_url('user/add'));
@@ -207,15 +208,16 @@ class UserController extends Controller
         else unset($data['password'], $data['confirm']);
         
         //Validate E-mail
-        if (!validate_email($data['email']))
+        if (!Validator::validate_email($data['email']))
         {
             Flash::set('error', __('E-mail is not valid!'));
             redirect(get_url('user/edit/'.$id));
         }
         else
         {
-            $user = User::findBy('email', $data['email']);
-            if($user)
+            $user0 = User::findBy('email', $data['email']);
+            $user = Record::findByIdFrom('User', $id);
+            if((strcasecmp($user->username, $user0->username))!=0)
             {
               Flash::set('error', __('This e-mail is already occupied!'));
               redirect(get_url('user/edit/'.$id));
