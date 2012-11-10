@@ -196,7 +196,7 @@ if (!empty($_POST['install']))
 		{
 			$connection = new PDO( $db_dsn, ($data['db_driver'] != 'sqlite' ? $data['db_user']: null), ($data['db_driver'] != 'sqlite' ? $data['db_password']: null) );
 			$connection->exec('SET NAMES "utf8"');
-			$connection->exec('SET time_zone = "'. date_default_timezone_get() .'"');
+			$connection->exec('SET time_zone = "'. date('P') .'"');
 		}
 		catch (Exception $e) { $db_exception = $e->getMessage(); }
 		
@@ -256,9 +256,7 @@ if (!empty($_POST['install']))
 					
 					function date_incremenator()
 					{
-						static $cpt=1;
-						$cpt++;
-						return date('Y-m-d H:i:s', time()+$cpt);
+						return date('Y-m-d H:i:s', time());
 					}
 					
 					$dump_content = file_get_contents($dump_file);

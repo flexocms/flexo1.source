@@ -37,7 +37,7 @@
  */
 
 // CMS version
-define('CMS_VERSION', '0.1.5 rc4');
+define('CMS_VERSION', '0.1.5 rc5');
 
 // Base pathes
 define('CMS_ROOT',          dirname(__FILE__));
@@ -105,7 +105,7 @@ switch( $connection->getAttribute(PDO::ATTR_DRIVER_NAME) )
 {
 	case 'mysql':
 		$connection->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
-		$connection->exec('SET time_zone = "'. date_default_timezone_get() .'"');
+		$connection->exec('SET time_zone = "'. date('P') .'"');
 		$connection->exec('SET NAMES "utf8"');
 		break;
 	
