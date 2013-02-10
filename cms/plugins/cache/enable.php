@@ -35,6 +35,16 @@
  * @copyright Maslakov Alexander, 2011
  */
  
+define('CACHE_STATIC_ROOT', PLUGINS_ROOT.DIRECTORY_SEPARATOR.'cache'.DIRECTORY_SEPARATOR.'static');
+
+if (!is_dir(CACHE_STATIC_ROOT)){
+  mkdir(CACHE_STATIC_ROOT);
+  chmod(CACHE_STATIC_ROOT, 0755);  
+}
+
+if (!file_exists(CACHE_STATIC_ROOT.DIRECTORY_SEPARATOR.'index.html')) 
+  file_put_contents(CACHE_STATIC_ROOT.DIRECTORY_SEPARATOR.'index.html','');
+ 
 $PDO = Record::getConnection();
 $driver = strtolower($PDO->getAttribute(Record::ATTR_DRIVER_NAME));
 

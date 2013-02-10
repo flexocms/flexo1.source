@@ -40,6 +40,13 @@
 define('CACHE_FILE_EXT', 'php');
 define('CACHE_STATIC_ROOT', PLUGINS_ROOT.DIRECTORY_SEPARATOR.'cache'.DIRECTORY_SEPARATOR.'static');
 
+if (!is_dir(CACHE_STATIC_ROOT)){
+  mkdir(CACHE_STATIC_ROOT);
+  chmod(CACHE_STATIC_ROOT, 0755);  
+}
+
+if (!file_exists(CACHE_STATIC_ROOT.DIRECTORY_SEPARATOR.'index.html')) 
+  file_put_contents(CACHE_STATIC_ROOT.DIRECTORY_SEPARATOR.'index.html','');
 
 /*
 * Handler for view_page_edit_options observer event
@@ -82,7 +89,16 @@ function cache_delete_all_handler($page)
 	{
 		if (!$file->isDot() && $file->isFile())
 			unlink($file->getPathname());
-	}	
+	}
+	
+	if (isset($page->id))
+	{
+    $conn = Record::getConnection();
+    $sql = 'DELETE FROM '.TABLE_PREFIX.'cache_page WHERE page_id=?';
+    $sth = $conn->prepare($sql);
+    $sth->execute(array($page->id));
+	}
+		
 } // end cache_delete_all_handler
 
 

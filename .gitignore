@@ -159,6 +159,7 @@ pip-log.txt
 #Mr Developer
 .mr.developer.cfg
 config.php
+cms/plugins/test
 
 # Mac crap
 .DS_Store

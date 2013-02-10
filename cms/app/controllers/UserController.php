@@ -217,7 +217,7 @@ class UserController extends Controller
         {
             $user0 = User::findBy('email', $data['email']);
             $user = Record::findByIdFrom('User', $id);
-            if((strcasecmp($user->username, $user0->username))!=0)
+            if(is_object($user0)&&(strcasecmp($user->username, $user0->username))!=0)
             {
               Flash::set('error', __('This e-mail is already occupied!'));
               redirect(get_url('user/edit/'.$id));
