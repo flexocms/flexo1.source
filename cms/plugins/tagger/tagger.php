@@ -47,7 +47,9 @@ class Tagger
 
         switch(count($params))
         {
-            case 0: break;
+            case 0:
+            	page_not_found();
+            	break;
             case 1:
                 $this->pagesByTag($params);
             break;
@@ -78,9 +80,9 @@ class Tagger
                 $object->url = '/'.$page->getUri();
                 $pages[] = $object;
             }
+            return $pages;
         }
         else return false;
-        return $pages;
     }
 
     public function tag($params = false)
