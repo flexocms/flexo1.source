@@ -14,6 +14,9 @@
 		<h3>There are no pages with tag "<?php echo $this->tagger->tag(); ?>"</h3>
 	<?php endif ?>
 
+ For showing tags of the page with links at list of other pages wish such a tag to add:
+	<?php echo tags_list($this->tags()); ?>
+
 
 == LICENSE:
 
