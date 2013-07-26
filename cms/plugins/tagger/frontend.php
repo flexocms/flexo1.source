@@ -35,5 +35,38 @@
  * @copyright Maslakov Alexander, 2013
  */
 
+function tagger_url($page_slug = NULL)
+{
+  $page_option = ($page_slug !== NULL) ? " AND slug = {$page_slug}" : "";
+	$sql = 'SELECT id FROM '.TABLE_PREFIX.'page WHERE behavior_id = "tagger"'.$page_option;
+	$stmt = Record::getConnection()->prepare($sql);
+	$stmt->execute();
+	$id = $stmt->fetchColumn();
+	if(!is_null($id) && $id !== false)
+	{
+		$page = Page::findbyId($id);
+		$url = $page->getUri();
+		return BASE_URL.$url.'/';
+	}
+	else
+	{
+		return tagger_url(NULL);
+	}
+}
+
+function tags_list($tags, $option = array())
+{
+	$separator = array_key_exists('separator', $option) ? $option['separator'] : ', ';
+	$tagger_page_slug = array_key_exists('tagger_page_slug', $option) ? $option['tagger_page_slug'] : NULL;
+	$i = 1;
+	foreach($tags as $tag)
+	{
+		$url = tagger_url($tagger_page_slug).$tag.URL_SUFFIX;
+		$end = $i == count($tags) ? '.' : $separator;
+		echo sprintf('<a href="%s">%s</a>%s', $url, $tag, $end);
+		$i++;
+	}
+}
+
 // Add behaviors
 Behavior::add('tagger', 'tagger/tagger.php');
