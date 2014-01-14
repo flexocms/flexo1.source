@@ -75,7 +75,7 @@ class Tagger
             $sql = "SELECT page.* FROM ".TABLE_PREFIX."page AS page, ".TABLE_PREFIX."page_tag AS page_tag, ".TABLE_PREFIX."tag AS tag" . $where;
             $stmt = $pdoConn->prepare($sql);
             $stmt->execute();
-            while ($object = $stmt->fetchObject('Page')) {
+            while ($object = $stmt->fetchObject('FrontPage')) {
                 $page = Page::findById($object->id);
                 $object->url = '/'.$page->getUri();
                 $pages[] = $object;
