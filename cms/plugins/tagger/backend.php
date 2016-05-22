@@ -1,7 +1,7 @@
 <?php if(!defined('CMS_ROOT')) die;
 
 /**
- * Flexo CMS - Content Management System. <http://flexo.up.dn.ua>
+ * Flexo CMS - Content Management System. <http://flexocms.ru>
  * Copyright (C) 2008 Maslakov Alexander <jmas.ukraine@gmail.com>
  * Copyright (C) 2008 Philippe Archambault <philippe.archambault@gmail.com>
  * Copyright (C) 2008 Martijn van der Kleijn <martijn.niji@gmail.com>
