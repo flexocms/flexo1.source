@@ -70,7 +70,7 @@
  Renders a list of links specified in the urls attribute according to three states:
 
  normal specifies the normal state for the link
- here specifies the state of the link when the url matches the current page’s URL
+ here specifies the state of the link when the url matches the current pageï¿½s URL
  selected specifies the state of the link when the current page matches is a child of the specified url
  The between tag specifies what should be inserted in between each of the links.
 
@@ -645,6 +645,5 @@ class FrontPage
         // Run!
         while ($object = $stmt->fetchObject())
              $this->tags[$object->id] = $object->tag;
-    }
-	
+    }	
 } // end FrontPage class
