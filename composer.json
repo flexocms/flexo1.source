@@ -1,0 +1,16 @@
+{
+    "name": "jmas/flexo-cms",
+    "description": "Flexo CMS",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "jmas",
+            "email": "jmas.ukraine@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-0": { "": "cms/framework/" }
+    }
+}

@@ -161,5 +161,18 @@ pip-log.txt
 config.php
 cms/plugins/test
 
+
+############
+## OSX
+############
+
 # Mac crap
 .DS_Store
+
+
+############
+## PHP
+############
+
+# Composer
+/vendor/

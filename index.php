@@ -39,32 +39,36 @@
 // CMS version
 define('CMS_VERSION', '1.0.0');
 
+
 // Base pathes
 define('CMS_ROOT',          dirname(__FILE__));
 define('CORE_DIR_NAME',     'cms');
 define('CORE_ROOT',         CMS_ROOT.DIRECTORY_SEPARATOR.CORE_DIR_NAME);
 
 
-// Catching errors
-register_shutdown_function('cms_shutdown_handler');
-set_error_handler('cms_error_handler');
+// Class autoloading and core framework bootstrap
+require(CMS_ROOT.DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR.'autoload.php');
+
+require(CORE_ROOT.DIRECTORY_SEPARATOR.'framework.php');
 
 
 // Include cofig
 $config_file = CMS_ROOT.DIRECTORY_SEPARATOR.'config.php';
 
 if (file_exists($config_file))
+{
 	require_once($config_file);
+}
 else
 {
 	header('Location: install/');
-	exit();
+	exit;
 }
 
 
 // Require Framework
 // Defines: DEBUG, APP_PATH, HELPER_PATH, BASE_URL, DEFAULT_CONTROLLER, DEFAULT_ACTION, DEFAULT_TIMEZONE
-require_once(CORE_ROOT.DIRECTORY_SEPARATOR.'Framework.php');
+require_once(CORE_ROOT.DIRECTORY_SEPARATOR.'framework.php');
 
 
 // CMS defaults
@@ -93,13 +97,18 @@ if (!defined('DEFAULT_LOCALE'))    define('DEFAULT_LOCALE',     'en');
 
 // Try connect to DB
 if (class_exists('PDO'))
+{
 	$connection = new PDO(
 		DB_DSN,
 		DB_USER,
 		DB_PASS
 	);
+}
 else
+{
 	throw new Exception('CMS need PHP PDO extension for working with DB!');
+}
+
 
 switch( $connection->getAttribute(PDO::ATTR_DRIVER_NAME) )
 {
@@ -169,7 +178,9 @@ if ($uri != '' && $uri[0] == '/')
 		$uri = substr($uri, 0, strrpos($uri, URL_SUFFIX));
 }
 else
+{
 	$uri = '/';
+}
 
 define('CURRENT_URI', $uri);
 
@@ -244,65 +255,3 @@ function get_url()
 	
 	return CMS_URL . ($is_backend ? ADMIN_DIR_NAME.'/' : '') . rtrim($url, '/') . ($is_backend ? '' : URL_SUFFIX);
 }
-
-
-/**
-* Handler for register_shutdown_function (Fatal errors catching)
-*/
-function cms_shutdown_handler()
-{
-	if (($error = error_get_last()) !== null)
-	{
-		cms_error_handler($error['type'], $error['message'], $error['file'], $error['line']);
-	}
-}
-
-
-/**
-* Handler for set_error_handler (Fatal errors catching)
-*/
-function cms_error_handler( $type, $message, $file, $line )
-{
-	if ( DEBUG === true )
-	{
-		switch ($type)
-		{
-			case E_ERROR:
-			case E_USER_ERROR:
-				$color = 'red';
-				$type_name = 'Run-time error';
-				break;
-			case E_WARNING:
-			case E_USER_WARNING:
-				$color = 'orange';
-				$type_name = 'Warning';
-				break;
-			case E_NOTICE:
-			case E_USER_NOTICE:
-				$color = 'yellow';
-				$type_name = 'Notice';
-				break;
-			default:
-				$color = 'pink';
-				$type_name = 'Unspecified error';
-				break;
-		}
-		
-		echo('<!--### ERROR '.$message.' '.$file.' '.$line.' ###-->'
-		    .'<!--">--></textarea></form></title></comment></a></div></span></ilayer></layer></div></iframe></noframes></style></noscript></table></script></applet></font>'
-		    .'<div style="position:relative;font-family:Verdana !important; font-size:12px !important; background:#fff; border:1px solid '.$color.' !important; color:#000 !important; text-align:left !important; margin:1em 0 !important; clear:both; z-index:10000 !important; overflow:hidden;">'
-		    .'<h1 style="font-size:130%; font-weight:bolder; padding:5px 10px; background:'. $color .' !important; margin:0;">'. $type_name .' (<a href="http://www.php.net/manual/ru/errorfunc.constants.php" target="_blank">#'. $type .'</a>): '.$message.'</h1>'
-		    .'<div style="font-size:110%; padding:5px 10px;">'
-		    .'<p><b>File:</b> '.$file.'</p>'
-		    .'<p><b>Line:</b> '.$line.'</p>'
-		    .'</div>'
-		    .'</div>'
-		    .'<!--### END ERROR ###-->');
-	}
-	
-	if (class_exists('Observer'))
-		Observer::notify('cms_error', array($type, $message, $file, $line));
-	
-	if ($type == E_ERROR || $type == E_USER_ERROR)
-		exit;
-} // end cms_error_handler
