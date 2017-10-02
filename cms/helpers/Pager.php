@@ -115,7 +115,7 @@ class Pager
         
         switch($this->style)
         {
-            // ‹ First  < 1 2 3 >  Last ›
+            // ï¿½ First  < 1 2 3 >  Last ï¿½
             case 'classic':
             default:
     
@@ -146,14 +146,14 @@ class Pager
                 
                 break;
             
-            // « Previous  1 2 … 5 6 7 8 9 10 11 12 13 14 … 25 26  Next »
+            // ï¿½ Previous  1 2 ï¿½ 5 6 7 8 9 10 11 12 13 14 ï¿½ 25 26  Next ï¿½
             case 'digg':
             
                 if($this->previous_page){
                     $out .= str_replace(':link', str_replace('{page}', $this->previous_page, $this->url), $this->prev_tag)."\n";
                 }
                 
-                if ($this->total_pages < 13) /* « Previous  1 2 3 4 5 6 7 8 9 10 11 12  Next » */
+                if ($this->total_pages < 13) /* ï¿½ Previous  1 2 3 4 5 6 7 8 9 10 11 12  Next ï¿½ */
                 {
                     for ($i = 1; $i <= $this->total_pages; $i++){
                         if ($i == $this->current_page){
@@ -163,7 +163,7 @@ class Pager
                         }
                     }
                 }
-                elseif ($this->current_page < 9) /* « Previous  1 2 3 4 5 6 7 8 9 10 … 25 26  Next » */
+                elseif ($this->current_page < 9) /* ï¿½ Previous  1 2 3 4 5 6 7 8 9 10 ï¿½ 25 26  Next ï¿½ */
                 {
                     for ($i = 1; $i <= 10; $i++){
                         if ($i == $this->current_page){
@@ -178,7 +178,7 @@ class Pager
                     $out .= str_replace(array(':link', ':name'), array(str_replace('{page}', $this->total_pages - 1, $this->url), $this->total_pages - 1), $this->link_tag)."\n";
                     $out .= str_replace(array(':link', ':name'), array(str_replace('{page}', $this->total_pages, $this->url), $this->total_pages), $this->link_tag)."\n";
                 }
-                elseif ($this->current_page > $this->total_pages - 8) /* « Previous  1 2 … 17 18 19 20 21 22 23 24 25 26  Next » */
+                elseif ($this->current_page > $this->total_pages - 8) /* ï¿½ Previous  1 2 ï¿½ 17 18 19 20 21 22 23 24 25 26  Next ï¿½ */
                 {
                     $out .= str_replace(array(':link', ':name'), array(str_replace('{page}', 1, $this->url), 1), $this->link_tag)."\n";
                     $out .= str_replace(array(':link', ':name'), array(str_replace('{page}', 2, $this->url), 2), $this->link_tag)."\n";
@@ -193,7 +193,7 @@ class Pager
                         }
                     }
                 }
-                else /* « Previous  1 2 … 5 6 7 8 9 10 11 12 13 14 … 25 26  Next » */
+                else /* ï¿½ Previous  1 2 ï¿½ 5 6 7 8 9 10 11 12 13 14 ï¿½ 25 26  Next ï¿½ */
                 { 
 
                     $out .= str_replace(array(':link', ':name'), array(str_replace('{page}', 1, $this->url), 1), $this->link_tag)."\n";
@@ -221,7 +221,7 @@ class Pager
                 
                 break;
                 
-            // « Previous | Page 2 of 11 | Showing items 6-10 of 52 | Next »
+            // ï¿½ Previous | Page 2 of 11 | Showing items 6-10 of 52 | Next ï¿½
             case 'extended':
                 
                 if ($this->previous_page){
@@ -242,7 +242,7 @@ class Pager
             
                 break;
                 
-            // Pages: 1 … 4 5 6 7 8 … 15
+            // Pages: 1 ï¿½ 4 5 6 7 8 ï¿½ 15
             case 'punbb':
             
                 if ($this->current_page > 3)
@@ -333,5 +333,3 @@ class Pager
     }
     
 } // End Pager Class
-
-?>

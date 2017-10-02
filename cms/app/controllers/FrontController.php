@@ -66,6 +66,8 @@ class FrontController extends Controller
 			$page->display();
 		}
 		else
+		{
 			page_not_found();
+		}
 	}
 } // end class FrontController

@@ -38,3 +38,4 @@ Flexo CMS components are licensed, as listed in this document.
 * File uploader component
   - Site: http://github.com/valums/file-uploader
   - License: GPL v2
+  

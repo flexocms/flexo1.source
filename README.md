@@ -3,7 +3,7 @@
 `v1.0`
 - Update License
 - Move to using Composer
-- Move frontend to using build process (add npm support)
+- Move frontend to using build process (add npm support, use webpack)
 - Work on issues posted on Github
 - Remove frontend support for old IE
 - Remove backend support for PHP less 5.3 
