@@ -5,7 +5,7 @@
 - Move to using Composer
 - Move frontend to using build process (add npm support, use webpack)
 - Work on issues posted on Github
-- Remove frontend support for old IE
+- Remove frontend support for old IE (less than 11)
 - Remove backend support for PHP less 5.3 
 
 `v2.0`
