@@ -18,6 +18,6 @@
 - Update plugins distribution
 
 `v4.0`
-- Update admin UI (move to using React and MobX)
+- Update admin UI (move to using React+Redux or Hyperapp)
 - Update core plugins
 - Create Comments plugin
